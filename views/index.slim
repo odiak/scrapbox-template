@@ -1,0 +1,83 @@
+doctype html
+html
+  head
+    meta charset="utf-8"
+    title Scrapbox template
+    css:
+      body {
+        font-family: sans-serif;
+      }
+      input {
+        font-size: 1em;
+      }
+  body
+    h1 Scrapbox template
+    p
+      a href="https://scrapbox.io" Scrapbox
+      | の既存のページを雛形にして新しいページを作るリダイレクターです。
+    h2 使い方
+    h3 例: odiak/template-test をコピーして odiak/2017-08-02 を作る場合。
+    p
+      a href="http://scrapbox-template.odiak.net/?src=odiak/template-test&dst=odiak/2017-08-02"
+        | http://scrapbox-template.odiak.net/?src=odiak/template-test&dst=odiak/2017-08-02
+
+    p ※ src のプロジェクト名だけを指定すると、タイトルは現在時刻(例: 017-08-02 11:12:23)になります。
+    p ※ dst を省略すると、本文が空のページを作成します。
+
+    br
+
+    h3 リンクジェネレーター
+    p
+      | 雛形にするページ: 
+      input#src-project type="text" placeholder="プロジェクト名 (省略可)" size="30"
+      |  / 
+      input#src-title type="text" placeholder="ページ名 (省略可)" size="30"
+    p
+      | 新しく作るページ: 
+      input#dst-project type="text" placeholder="プロジェクト名" size="30" value="test"
+      |  / 
+      input#dst-title type="text" placeholder="ページ名 (省略可)" size="30"
+
+    p
+      | リンク: 
+      a#link href=""
+
+    br
+
+    p
+      | 作者: 
+      a href="https://twitter.com/odiak_" @odiak_
+
+    javascript:
+      var srcProjInput = document.getElementById('src-project');
+      var srcTitleInput = document.getElementById('src-title');
+      var dstProjInput = document.getElementById('dst-project');
+      var dstTitleInput = document.getElementById('dst-title');
+      var link = document.getElementById('link');
+      function generateLink() {
+        var srcProj = srcProjInput.value;
+        var srcTitle = srcTitleInput.value;
+        var dstProj = dstProjInput.value;
+        var dstTitle = dstTitleInput.value;
+        var url = 'http://scrapbox-template.odiak.net/?';
+        if (!dstProj) return;
+        if (srcProj && srcTitle) {
+          url += 'src=' + srcProj + '/' + encodeURI(srcTitle) + '&';
+        }
+        url += 'dst=' + dstProj;
+        if (dstTitle) {
+          url += '/' + encodeURI(dstTitle);
+        }
+        link.href = url;
+        link.innerText = url;
+      }
+      generateLink();
+      [
+        srcProjInput,
+        srcTitleInput,
+        dstProjInput,
+        dstTitleInput,
+      ].forEach(function (elem) {
+        elem.addEventListener('keyup', generateLink);
+        elem.addEventListener('change', generateLink);
+      });
